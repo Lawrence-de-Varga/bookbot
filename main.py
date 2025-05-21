@@ -1,4 +1,8 @@
-from stats import count_words, count_alpha_chars, count_punc_chars
+import sys
+from stats import count_words, count_alpha_chars
+from stats import sort_char_count
+from present import present_book_stats
+
 
 def get_book_text(book_path):
     with open(book_path) as b:
@@ -6,13 +10,19 @@ def get_book_text(book_path):
 
     return contents
 
+
 def main():
-    franken = get_book_text("books/frankenstein.txt")
-    word_count = count_words(franken)
-    char_count = count_alpha_chars(franken)
-    punc_count = count_punc_chars(franken)
-    # print(f"{char_count} charactersfound in the document")
-    print(char_count)
-    print()
-    print(punc_count)
-main()    
+    if len(sys.argv) != 2:
+        print("Usage: python3 main.py <path_to_book>")
+        sys.exit(1)
+
+    path = sys.argv[1]
+    book = get_book_text(path)
+    word_count = count_words(book)
+    char_count = count_alpha_chars(book)
+
+    sorted_chars = sort_char_count(char_count)
+    present_book_stats(word_count, sorted_chars, path)
+
+
+main()
